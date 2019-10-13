@@ -1,4 +1,4 @@
-CFLAGS = -Wall -ansi -pedantic -Werror
+CFLAGS = -Wall -ansi -pedantic -Werror -std=c89
 CC = gcc
 OBJ = UserInterface.o FileIO.o gameEngine.o linked_list.o logs.o
 HDRS = UserInterface.h FileIO.h gameEngine.h linked_list.h logs.h

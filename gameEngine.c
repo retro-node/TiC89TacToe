@@ -12,7 +12,15 @@ being printed.
 *************************/
 
 #include "gameEngine.h"
-
+/* Static Definitions */
+static int numLinedUpY(int**, int, int, int, int); 
+static int numLinedUpX(int**, int, int, int, int); 
+static int numLinedUpDiagon(int**, int, int, int, int); 
+static int numLinedUpDiagonFlip(int**, int, int, int, int); 
+static int numLinedUpYNeg(int**, int, int, int, int); 
+static int numLinedUpXNeg(int**, int, int, int, int); 
+static int numLinedUpDiagonNeg(int**, int, int, int, int); 
+static int numLinedUpDiagonFlipNeg(int**, int, int, int, int); 
 
 /*
 * Calls initialise to recieve fresh game board (2D array of zeros)
@@ -51,7 +59,7 @@ GameLog* runGame(int m, int n, int k, int gamenum)
             {
                 getCoords(&x, &y, m ,n);
             }
-            gameover = checkWin(board);
+            gameover = checkWin(board, m , n, k, x ,y);
         }   
         if(!gameover)
         {
@@ -64,7 +72,7 @@ GameLog* runGame(int m, int n, int k, int gamenum)
             {
                 getCoords(&x, &y, m, n);
             }
-            gameover = checkWin(board);
+            gameover = checkWin(board, m, n, k, x, y);
         }
     }
     while(!gameover);
@@ -171,6 +179,7 @@ int playerMove(int** board, int player, int x, int y, GameLog* game,
     }
     return issue;
 }
+
 /********
 * Checks the state of the board and determines if a win has occurred, if yes
     return the player who won (1 or 2 or 3 for draw), 
@@ -178,54 +187,245 @@ int playerMove(int** board, int player, int x, int y, GameLog* game,
 * [0][i] y axis check TODO
 * [i][0] x axis check TODO
 * [i][i] Diagonal check TODO
-* Recursive implimentation best
+* Direction is relative to 2D array not board display where up would be lower 
+on the screen.
+* returns number found in line (k)
 */
-int checkWin(int** gameState, int m, int n, int k)
+int checkWin(int** arr, int w, int h, int k, int posx, int posy)
 {
-    int result, i;
-    /* scan through row by row */
-    for(i=0; i<m;i++)
+    int numel, temp;
+    if(posx < w && posy < h && posx >= 0 && posy >= 0) /*within bounds - each 
+    func has bound checks also */
     {
-        for(ii=0;ii<n;ii++) /* perform 3 checks x,y,diagonal */
+        /* RECURSIVE METHODS */
+        temp = numLinedUpY(arr, w, h, posx, posy);
+        if(temp == k)
         {
-            gameState[i][ii]
+            numel = temp;
+        }
+        temp = numLinedUpYNeg(arr, w, h, posx, posy);
+        if(temp == k)
+        {
+            numel = temp;
+        }
+        temp = numLinedUpX(arr, w, h, posx, posy);
+        if(temp == k)
+        {
+            numel = temp;
+        }
+        temp = numLinedUpDiagon(arr, w, h, posx, posy);
+        if(temp == k)
+        {
+            numel = temp;
+        }
+        temp = numLinedUpDiagonFlip(arr, w, h, posx, posy);
+        if(temp == k)
+        {
+            numel = temp;
+        }
+      
+        temp = numLinedUpXNeg(arr, w, h, posx, posy);
+        if(temp == k)
+        {
+            numel = temp;
+        }
+        temp = numLinedUpDiagonNeg(arr, w, h, posx, posy);
+        if(temp == k)
+        {
+            numel = temp;
+        }
+        temp = numLinedUpDiagonFlipNeg(arr, w, h, posx, posy);
+        if(temp == k)
+        {
+            numel = temp;
         }
     }
-    printf("checkWin not implimented\n");
-    return 3;
+    return numel;
 }
-/**************
- recursive method to return number of the same elements aligned in 
-an array of ints
+/***************** TODO determine true directions
+* Positive Direction Counters
+* Determine how many matching elements lined up in positive x y and xy directi-
+-ons
+* Recursively used via numLinedUp wrapper method
 */
-int numLinedUp(int** arr, int w, int h, int i, int ii)
+static int numLinedUpY(int** arr, int w, int h, int i, int ii)
 {
-    int numel;
-    if(i < w && ii <h) /*within bounds - need further nested checks*/
+    int num = 0;
+    if(ii+1 < h)
     {
-        if(ii+1 < h)
+        if(arr[i][ii] == arr[i][ii+1]) /* y axis condition */
         {
-            if(arr[i][ii] == arr[i][ii+1]) /* y axis condition */
-            {
-                numLinedUp(arr, w, h, i, ii+1);
-            }
+            num += numLinedUpY(arr, w, h, i, ii+1);
         }
-        if(i+1 < w)
+        else
         {
-            if(arr[i][ii] == arr[i+1][ii])
-            {
-                numLinedUp(arr, w, h, i+1, ii);
-            }
+            num = 1;
+        }   
+    }
+    else
+    {
+        num = 1;
+    }
+    return num;
+
+ }
+
+static int  numLinedUpX(int** arr, int w, int h, int i, int ii)
+{
+    int num = 0;
+    if(i+1 < w)
+    {
+        if(arr[i][ii] == arr[i+1][ii]) /* try up */
+        {
+            num += numLinedUpX(arr, w, h, i+1, ii);
         }
-        if(i+1 < w && ii+1 < h)
+        else
         {
-            if(arr[i][ii] == arr[i+1][ii+1])
-            {
-                numLinedUp(arr, w, h, i+1, ii+1);
-            }
+            num = 1;
         }
     }
+    else
+    {
+        num = 1;
+    }
+    return num;
 }
+
+static int numLinedUpDiagon(int** arr, int w, int h, int i, int ii)
+{
+    int num = 0;
+    if(i+1 < w && ii+1 < h)
+    {
+        if(arr[i][ii] == arr[i+1][ii+1])
+        {
+            num += numLinedUpDiagon(arr, w, h, i+1, ii+1);
+        }
+        else
+        {
+            num = 1;
+        }
+    }
+    else
+    {
+        num = 1;
+    }
+    return num;
+}
+
+static int numLinedUpDiagonFlip(int** arr, int w, int h, int i, int ii)
+{
+    int num = 0;
+    if(i-1 >= 0 && ii+1 < h)
+    {
+        if(arr[i][ii] == arr[i-1][ii+1]) /* Recurse in negative x and pos y */
+        {
+            num += numLinedUpDiagonFlip(arr, w, h, i-1, ii+1);
+        }
+        else
+        {
+            num = 1;
+        }
+    }
+    else
+    {
+        num = 1;
+    }
+    return num;
+}
+
+
+/*****************
+* Negative Direction Counters
+* Determine how many matching elements are lined up in an -x, -y and -xy direc-
+tion
+* Recursively used via numLinedUp wrapper method
+*/
+static int numLinedUpYNeg(int** arr, int w, int h, int i, int ii)
+{
+    int num = 0;
+    if(ii-1 >= 0)
+    {
+        if(arr[i][ii] == arr[i][ii-1])
+        {
+            num += numLinedUpYNeg(arr, w, h, i, ii-1);
+        }
+        else
+        {
+            num = 1;
+        }   
+    }
+    else
+    {
+        num = 1;
+    }
+    return num;
+
+ }
+
+static int  numLinedUpXNeg(int** arr, int w, int h, int i, int ii)
+{
+    int num = 0;
+    if(i-1 > 0)
+    {
+        if(arr[i][ii] == arr[i-1][ii])
+        {
+            num += numLinedUpXNeg(arr, w, h, i-1, ii);
+        }
+        else
+        {
+            num = 1;
+        }
+    }
+    else
+    {
+        num = 1;
+    }
+    return num;
+}
+
+static int numLinedUpDiagonNeg(int** arr, int w, int h, int i, int ii)
+{
+    int num = 0;
+    if(i-1 >= 0 && ii-1 >= 0)
+    {
+        if(arr[i][ii] == arr[i-1][ii-1])
+        {
+            num += numLinedUpDiagonNeg(arr, w, h, i-1, ii-1);
+        }
+        else
+        {
+            num = 1;
+        }
+    }
+    else
+    {
+        num = 1;
+    }
+    return num;
+}
+
+static int numLinedUpDiagonFlipNeg(int** arr, int w, int h, int i, int ii)
+{
+    int num = 0;
+    if(i+1 < w && ii-1 >= 0)
+    {
+        if(arr[i][ii] == arr[i+1][ii-1]) /* Recurse in pos x and neg y */
+        {
+            num += numLinedUpDiagonFlipNeg(arr, w, h, i+1, ii-1);
+        }
+        else
+        {
+            num = 1;
+        }
+    }
+    else
+    {
+        num = 1;
+    }
+    return num;
+}
+
+
 
 
 /*********
