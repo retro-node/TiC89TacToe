@@ -1,2 +1,3 @@
 3. VALGRIND
 4. Check k !> longest possible
+5. Make clearbuffer Enter to continue text

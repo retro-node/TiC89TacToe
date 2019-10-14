@@ -193,7 +193,7 @@ Accessed at 19:55 04-10-2019
 */
 void clearInBuff(void)
 {
-    printf("\nOk");
+    printf("\nPress enter to continue...");
     while(getchar()!='\n'); /* preferred as not undefined by c standard as 
                             fflush(stdin); is */
     printf("\n");

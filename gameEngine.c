@@ -120,8 +120,6 @@ GameLog* runGame(int m, int n, int k, int gamenum)
     printf("\x1b[0m");
     freeGame(board, m);
     clearInBuff();
-    printf("Press Enter to continue...");
-    getchar();
     return thisGame;
 }
 /********
