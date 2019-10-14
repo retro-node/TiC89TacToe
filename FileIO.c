@@ -15,7 +15,7 @@
 /******************
 * loadSettings
 * REQUIRES FREE
-* Exports struct containing n, m & k parameters, ignoring case where each is 
+* Exports struct containing n, m & k parameters, ignoring case where each is
     defined as "=" no spaces to a positive integer.
 * RETURNS NULL ON INVALID SETTINGS FILE - FORCES CORRECT FILE FORMAT
 *****************/
@@ -30,7 +30,7 @@ BoardSettings* loadSettings(char* fileN)
     * reading also requires the number to be valid i.e. positive integer
     */
     settings = fopen(fileN, "r");
-    
+
     if(settings == NULL)
     {
         perror("Error opening file");
@@ -68,7 +68,7 @@ BoardSettings* loadSettings(char* fileN)
                     else
                     {
                         printf("Invalid setting detected: %c", inc);
-                    }   
+                    }
                 }
             }
             else if(res == EOF)
@@ -77,7 +77,7 @@ BoardSettings* loadSettings(char* fileN)
             }
             else
             {
-                /* do nothing - ignore invalid bindings     
+                /* do nothing - ignore invalid bindings
                 printf("Invalid line format found.\n"); */
             }
         }
@@ -89,10 +89,10 @@ BoardSettings* loadSettings(char* fileN)
         }
         fclose(settings);
         /* Once file is processed, verify data and return null if invalid */
-        /* VERIFY SETTINGS DATA 
+        /* VERIFY SETTINGS DATA
         * ensure 1. all set 2. none are set more than once */
         if((mval != 0 && nval != 0 && kval != 0)
-            && (mvalset == 1 && nvalset == 1 && kvalset == 1)) 
+            && (mvalset == 1 && nvalset == 1 && kvalset == 1))
         {
             /* if valid populate struct values */
             game = (BoardSettings*)calloc(1,sizeof(BoardSettings));
@@ -103,7 +103,7 @@ BoardSettings* loadSettings(char* fileN)
         else
         {
             /* keep game as equal NULL and print problem */
-            printf("Settings Error: Please ensure all setting values " 
+            printf("Settings Error: Please ensure all setting values "
                     "are set and no duplicates exist.\n");
         }
     }
@@ -127,7 +127,7 @@ void saveLogs(Logs* log)
     {
         int i, ii;
         GameLog* game;
-        fprintf(fileout, "SETTINGS:\n    M: %d\n    N: %d\n    K: %d\n", 
+        fprintf(fileout, "SETTINGS:\n    M: %d\n    N: %d\n    K: %d\n",
         log->m, log->n, log->k);
         if(log->gameLogs != NULL && log->gameLogs->count > 0)
         {
@@ -137,16 +137,16 @@ void saveLogs(Logs* log)
                 if(game!=NULL)
                 {
                     fprintf(fileout, "Game %d\n", game->gameno);
-                    for(ii=0; ii<getListLength(game->turnLogs); ii++) /* for 
-                        each game loop over and get all moves, printing them 
+                    for(ii=0; ii<getListLength(game->turnLogs); ii++) /* for
+                        each game loop over and get all moves, printing them
                         to file */
                     {
                         MoveLog* move = NULL;
                         move = (MoveLog*)accessNode(game->turnLogs, ii);
                         if(move!=NULL) /* guard against invalid writes */
                         {
-                            fprintf(fileout, "    Turn: %d\n    Player: %c\n"    
-                            "    Location: %d,%d\n", move->movenum,
+                            fprintf(fileout, "    Turn: %d\n    Player: %c\n"
+                            "    Location: %d,%d\n\n", move->movenum,
                             move->player, move->x, move->y);
                         }
                     }
@@ -157,7 +157,7 @@ void saveLogs(Logs* log)
         {
             fprintf(fileout, "\nNo games found.");
         }
-        
+
     }
     if(ferror(fileout))
     {
@@ -180,4 +180,4 @@ char* makeFileName(Logs* log)
     log->k,log->Time->hour,log->Time->min,log->Time->dayn,log->Time->month);
 
     return namebuf;
-}   
+}

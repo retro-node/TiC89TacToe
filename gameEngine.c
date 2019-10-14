@@ -5,8 +5,9 @@
 * Author: Jeffrey Dugmore
 * Date Created: 29/09/2019
 * Date Modified: 04/10/2019
-*TODO: 1. checkwin - win condition
-2. input will accept more than 2 coordinates (x,y,z) - fix with get
+*TODO:  1. DEBUG checkwin
+        2. input will accept more than 2 coordinates (x,y,z) - fix with get
+        3. Turn No
 * Known Issues: reading extra line on input of getCorrds() results in error msg
 being printed.
 *************************/
@@ -55,6 +56,7 @@ GameLog* runGame(int m, int n, int k, int gamenum)
             displayBoard(m, n, graphics(board, m ,n)); /* display the board of
                      its size using graphical representaion with X's and Os' */
             printf("Player 1 - X's Turn:");
+            turncount ++;
             getCoords(&x, &y, m, n);
             while(playerMove(board, 1, x, y, thisGame, turncount)
                     == 1)
@@ -71,6 +73,7 @@ GameLog* runGame(int m, int n, int k, int gamenum)
             system("clear");
             displayBoard(m, n, graphics(board, m ,n));
             printf("Player 2 - O's Turn:");
+            turncount ++;
             getCoords(&x, &y, m, n);
             while(playerMove(board, 2, x, y, thisGame, turncount)
                 == 1) /* on error get new coords*/
@@ -81,39 +84,40 @@ GameLog* runGame(int m, int n, int k, int gamenum)
             {
                 gameover = 2;
             }
+            gameover = 2;
         }
     }
     while(!gameover);
     if(gameover == 1)
     { /* X's win */
         printf("\x1b[32m ===============================\n");
-        printf("\x1b[32m ======= \x1b[36m CONGRATS PLAYER 1 =====\n");
-        printf("\x1b[32m ===      \x1b[36m    YOU            ===\n");
-        printf("\x1b[32m ===       \x1b[36m   WIN            ===\n");
+        printf("\x1b[32m =======\x1b[36m CONGRATS PLAYER 1 \x1b[32m=====\n");
+        printf("\x1b[32m ===     \x1b[36m    YOU            \x1b[32m===\n");
+        printf("\x1b[32m ===      \x1b[36m   WIN            \x1b[32m===\n");
         printf("\x1b[32m ===============================\n");
     }
     else if(gameover == 2)
     { /* O's win */
         printf("\x1b[35m ===============================\n");
-        printf("\x1b[35m ======= \x1b[33m CONGRATS PLAYER 2 =====\n");
-        printf("\x1b[35m ===          \x1b[33m YOU            ===\n");;
-        printf("\x1b[35m ===          \x1b[33m WIN            ===\n");
+        printf("\x1b[35m =======\x1b[33m CONGRATS PLAYER 2 \x1b[35m=====\n");
+        printf("\x1b[35m ===         \x1b[33m YOU            \x1b[35m===\n");;
+        printf("\x1b[35m ===         \x1b[33m WIN            \x1b[35m===\n");
         printf("\x1b[35m ===============================\n");
 
     }
     else
     { /* DRAW */
         printf("\x1b[31m ===============================\n");
-        printf("\x1b[31m ===== \x1b[34m EVERYONE IS A WINNER ====\n");
-        printf("\x1b[31m ===    \x1b[34m   ..OR A LOSER      ===\n");
-        printf("\x1b[31m == \x1b[34m really makes you think... ==\n");
+        printf("\x1b[31m =====\x1b[34m EVERYONE IS A WINNER \x1b[31m====\n");
+        printf("\x1b[31m ===   \x1b[34m   ..OR A LOSER      \x1b[31m===\n");
+        printf("\x1b[31m ==\x1b[34m really makes you think... \x1b[31m==\n");
         printf("\x1b[31m ===============================\n");
     }
     printf("\x1b[0m");
     freeGame(board, m);
     clearInBuff();
-    /*(printf("Press Enter to continue...");
-    getchar();*/
+    printf("Press Enter to continue...");
+    getchar();
     return thisGame;
 }
 /********
@@ -129,10 +133,10 @@ void getCoords(int* x, int* y, int width, int height)
     /*fgets(line, MAX_TERM_LINE, stdin);*/
     do
     {
-        clearInBuff();
+        /*clearInBuff();*/
         printf("\n\tCoordinates: ");
         fgets(line, MAX_TERM_LINE, stdin);
-        num = sscanf(line, " (%d,%d) ", &xtemp, &ytemp);
+        num = sscanf(line, "(%d,%d)", &xtemp, &ytemp);
         if(xtemp < width && xtemp >= 0 && ytemp < height && ytemp >= 0 &&
             num == 2)
         /* within range - no negatives, within the confines of the board and
@@ -151,6 +155,10 @@ void getCoords(int* x, int* y, int width, int height)
                 printf("Hint: use the form (x,y)\n");
             }
             if(tries == 5)
+            {
+                printf("Please ensure the coords are on the board.\n");
+            }
+            if(tries == 6)
             {
                 printf("Have you tried using the brackets...\n");
             }
@@ -175,6 +183,7 @@ void getCoords(int* x, int* y, int width, int height)
     }
     while(!done);
 }
+
 /*******
 * Handles the actual user inputted coordinates, places a distinct number in
     location to be translated later by graphics function.
@@ -182,15 +191,13 @@ void getCoords(int* x, int* y, int width, int height)
 * x and y already sterilised input || X = Width Y = Height
 * includes creation of corersponding move log
 */
-int playerMove(int** board, int player, int x, int y, GameLog* game,
-                 int turnno)
+int playerMove(int** board, int player, int x, int y, GameLog* game, int turnno)
 {
     int issue;
     if(board[x][y] == 0)
     {
         board[x][y] = player;
-        turnno++;
-        addMoveLog(game,createMoveLog(turnno,player,x,y));/*log if successful
+        addMoveLog(game, createMoveLog(turnno,player,x,y));/*log if successful
                                                                         turn*/
         issue = 0;
     }
@@ -204,13 +211,11 @@ int playerMove(int** board, int player, int x, int y, GameLog* game,
 
 /********
 * Checks the state of the board and determines if a win has occurred, if yes
-    return the player who won (1 or 2 or 3 for draw),
-        otherwise return 0 - in progress
-* [0][i] y axis check TODO
-* [i][0] x axis check TODO
-* [i][i] Diagonal check TODO
-* Direction is relative to 2D array not board display where up would be lower
-on the screen.
+    return the tiles in a row
+    otherwise return 0
+
+* Direction is relative to 2D array not board display where -y would be towards
+lower part of the screen.
 * returns number found in line (k)
 * Can add smart reading so that if it touches edge of board skip that check
 */
