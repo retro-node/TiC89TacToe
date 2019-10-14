@@ -48,6 +48,10 @@ GameLog* runGame(int m, int n, int k, int gamenum)
     gameover = 0;
     do
     {
+        if(turncount == m*n)
+        {
+            gameover = 3; /* when board is full end as draw condition */
+        }
         if(!gameover)
         {
             /*system("clear");*/
@@ -83,22 +87,24 @@ GameLog* runGame(int m, int n, int k, int gamenum)
                 gameover = 2;
             }
         }
+        
     }
     while(!gameover);
+
     if(gameover == 1)
     { /* X's win */
         printf("\x1b[32m ===============================\n");
         printf("\x1b[32m =======\x1b[36m CONGRATS PLAYER 1 \x1b[32m=====\n");
-        printf("\x1b[32m ===     \x1b[36m    YOU            \x1b[32m===\n");
-        printf("\x1b[32m ===      \x1b[36m   WIN            \x1b[32m===\n");
+        printf("\x1b[32m ===     \x1b[36m      YOU           \x1b[32m===\n");
+        printf("\x1b[32m ===      \x1b[36m     WIN           \x1b[32m===\n");
         printf("\x1b[32m ===============================\n");
     }
     else if(gameover == 2)
     { /* O's win */
         printf("\x1b[35m ===============================\n");
         printf("\x1b[35m =======\x1b[33m CONGRATS PLAYER 2 \x1b[35m=====\n");
-        printf("\x1b[35m ===         \x1b[33m YOU            \x1b[35m===\n");
-        printf("\x1b[35m ===         \x1b[33m WIN            \x1b[35m===\n");
+        printf("\x1b[35m ===         \x1b[33m  YOU           \x1b[35m===\n");
+        printf("\x1b[35m ===         \x1b[33m  WIN           \x1b[35m===\n");
         printf("\x1b[35m ===============================\n");
 
     }
@@ -106,7 +112,7 @@ GameLog* runGame(int m, int n, int k, int gamenum)
     { /* DRAW */
         printf("\x1b[31m ===============================\n");
         printf("\x1b[31m =====\x1b[34m EVERYONE IS A WINNER \x1b[31m====\n");
-        printf("\x1b[31m ===   \x1b[34m   ..OR A LOSER      \x1b[31m===\n");
+        printf("\x1b[31m ===   \x1b[34m    ..OR A LOSER      \x1b[31m===\n");
         printf("\x1b[31m ==\x1b[34m really makes you think... \x1b[31m==\n");
         printf("\x1b[31m ===============================\n");
     }
@@ -240,17 +246,16 @@ int checkWin(int** arr, int w, int h, int k, int posx, int posy)
             {
                 nlu = numLinedUpX;
             }
-            else if (count == 3)
+            else if (count == 5)
+            {
+                nlu = numLinedUpXNeg;
+            } else if (count == 3)
             {
                 nlu = numLinedUpDiagon;
             }
             else if (count == 4)
             {
                 nlu = numLinedUpDiagonFlip;
-            }
-            else if (count == 5)
-            {
-                nlu = numLinedUpXNeg;
             }
             else if (count == 6)
             {
@@ -292,6 +297,7 @@ static int numLinedUpY(int** arr, int w, int h, int i, int ii)
     {
         if(arr[i][ii] != 0 && arr[i][ii] == arr[i][ii+1]) /* y axis condition */
         {
+            num ++;
             num += numLinedUpY(arr, w, h, i, ii+1);
         }
         else
@@ -315,8 +321,9 @@ static int  numLinedUpX(int** arr, int w, int h, int i, int ii)
     int num = 1;
     if(i+1 < w)
     {
-        if(arr[i][ii] != 0 && arr[i][ii] == arr[i+1][ii]) /* try up */
+        if(arr[i][ii] != 0 && arr[i][ii] == arr[i+1][ii])
         {
+            num ++;
             num += numLinedUpX(arr, w, h, i+1, ii);
         }
         else
@@ -342,6 +349,7 @@ static int numLinedUpDiagon(int** arr, int w, int h, int i, int ii)
     {
         if(arr[i][ii] != 0 && arr[i][ii] == arr[i+1][ii+1])
         {
+            num ++;
             num += numLinedUpDiagon(arr, w, h, i+1, ii+1);
         }
         else
@@ -366,6 +374,7 @@ static int numLinedUpDiagonFlip(int** arr, int w, int h, int i, int ii)
     {
         if(arr[i][ii] != 0 && arr[i][ii] == arr[i-1][ii+1]) /* Recurse in negative x and pos y */
         {
+            num ++;
             num += numLinedUpDiagonFlip(arr, w, h, i-1, ii+1);
         }
         else
@@ -398,6 +407,7 @@ static int numLinedUpYNeg(int** arr, int w, int h, int i, int ii)
     {
         if(arr[i][ii] != 0 && arr[i][ii] == arr[i][ii-1])
         {
+            num ++;
             num += numLinedUpYNeg(arr, w, h, i, ii-1);
         }
         else
@@ -417,13 +427,14 @@ static int numLinedUpYNeg(int** arr, int w, int h, int i, int ii)
  * NEGATIVE X (LEFT OF SCREEN)
  */
 
-static int numLinedUpXNeg(int** arr, int w, int h, int i, int ii)
+static int  numLinedUpXNeg(int** arr, int w, int h, int i, int ii)
 {
     int num = 1;
     if(i-1 > 0)
     {
         if(arr[i][ii] != 0 && arr[i][ii] == arr[i-1][ii])
         {
+            num ++;
             num += numLinedUpXNeg(arr, w, h, i-1, ii);
         }
         else
@@ -448,6 +459,7 @@ static int numLinedUpDiagonNeg(int** arr, int w, int h, int i, int ii)
     {
         if(arr[i][ii] != 0 && arr[i][ii] == arr[i-1][ii-1])
         {
+            num ++;
             num += numLinedUpDiagonNeg(arr, w, h, i-1, ii-1);
         }
         else
@@ -473,6 +485,7 @@ static int numLinedUpDiagonFlipNeg(int** arr, int w, int h, int i, int ii)
     {
         if(arr[i][ii] != 0 && arr[i][ii] == arr[i+1][ii-1]) /* Recurse in pos x and neg y */
         {
+            num ++;
             num += numLinedUpDiagonFlipNeg(arr, w, h, i+1, ii-1);
         }
         else
