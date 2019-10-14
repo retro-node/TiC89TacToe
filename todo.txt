@@ -1,2 +1,3 @@
-2. DEBUG time
-3. VALGRIND
+ DEBUG time
+ VALGRIND
+ Add system clears back in
