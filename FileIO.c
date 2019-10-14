@@ -176,6 +176,20 @@ Takes a game log and makes equivilent file name for that log.
 char* makeFileName(Logs* log)
 {
     char *namebuf = (char*)calloc(40, sizeof(char));
+    int dayn, month, min, hour;
+    time_t rawt = time(NULL);   /*time(NULL) From https://stackoverflow.com/
+    questions/1442116/how-to-get-the-date-and-time-values-in-a-c-program
+                                  answered Sep 18 '09 at 0:58
+                                  By Adam Rosenfield */
+    struct tm *localtnow;
+    char *namebuf = (char*)calloc(40, sizeof(char));
+    localtnow = localtime(&rawt);
+
+    dayn=localtnow->tm_mday;
+    month=localtnow->tm_mon + 1;
+    min=localtnow->tm_min;
+    hour=localtnow->tm_hour;
+
     sprintf(namebuf, "MNK_%d-%d-%d_%02d-%02d_%02d-%02d.log", log->m, log->n,
     log->k,log->Time->hour,log->Time->min,log->Time->dayn,log->Time->month);
 
