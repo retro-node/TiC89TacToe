@@ -5,7 +5,7 @@
 * Author: Jeffrey Dugmore
 * Date Created: 29/09/2019
 * Date Modified: 04/10/2019
-*TODO:  1. DEBUG checkwin
+
 * Known Issues: reading extra line on input of getCorrds() results in error msg
 being printed.
 *************************/
@@ -32,7 +32,7 @@ static int numLinedUpDiagonFlipNeg(int**, int, int, int, int);
 GameLog* runGame(int m, int n, int k, int gamenum)
 {
     /* gamenum tracks game number in this program run */
-    static int turncount = 0; /* tracks turns, initialised each game */
+    static int turncount; /* tracks turns, initialised each game */
     int x, y, gameover;
     int **board;
     GameLog* thisGame = NULL;
@@ -45,6 +45,7 @@ GameLog* runGame(int m, int n, int k, int gamenum)
     *   will use X's as first turn as this is how i've always played -
     *   much like chess.
     */
+    turncount = 0;
     gameover = 0;
     do
     {
@@ -132,9 +133,10 @@ void getCoords(int* x, int* y, int width, int height)
     char line[MAX_TERM_LINE];
     int xtemp, ytemp;
     char closechar;
-    static int tries = 0;
+    static int tries;
     int done = 0;
     /*fgets(line, MAX_TERM_LINE, stdin);*/
+    tries = 0;
     do
     {
         /*clearInBuff();*/

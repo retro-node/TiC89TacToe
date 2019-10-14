@@ -1,3 +1,2 @@
-1. DEBUG wincond
 2. DEBUG time
 3. VALGRIND
