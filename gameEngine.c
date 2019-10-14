@@ -33,7 +33,7 @@ GameLog* runGame(int m, int n, int k, int gamenum)
 {
     /* gamenum tracks game number in this program run */
     static int turncount; /* tracks turns, initialised each game */
-    int x, y, gameover;
+    int x, y, gameover, freei;
     int **board;
     GameLog* thisGame = NULL;
     board = initialiseGame(m, n);
@@ -118,7 +118,12 @@ GameLog* runGame(int m, int n, int k, int gamenum)
         printf("\x1b[31m ===============================\n");
     }
     printf("\x1b[0m");
-    freeGame(board, m);
+    /*freeGame(board, m);*/
+    for(freei=0; freei < m; freei++) /* non contiguous must be freed first */
+    {
+        free(board[freei]);
+    }
+    free(board);
     clearInBuff();
     return thisGame;
 }

@@ -89,7 +89,7 @@ void addMoveLog(GameLog* gamelog, MoveLog* movelog)
 */
 void freeAllLogs(Logs* all)
 {
-    freeLinkedList(all->gameLogs, freeMoveLogs);
+    freeLinkedList(all->gameLogs, freeGameLogs);
     free(all);
 }
 

@@ -1,7 +1,6 @@
 #ifndef LOGS_H
 #define LOGS_H
 #include <stdio.h>
-#include <time.h>
 #include "linked_list.h"
 typedef struct{
     int movenum;

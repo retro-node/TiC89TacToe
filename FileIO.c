@@ -191,6 +191,6 @@ char* makeFileName(Logs* log)
 
     sprintf(namebuf, "MNK_%d-%d-%d_%02d-%02d_%02d-%02d.log", log->m, log->n,
     log->k,hour,min,dayn,month);
-
+    free(localtnow); /* TODO Determine appropriate free */
     return namebuf;
 }
