@@ -213,7 +213,8 @@ int playerMove(int** board, int player, int x, int y, GameLog* game,
 on the screen.
 * returns number found in line (k)
 * Can add smart reading so that if it touches edge of board skip that check
-*TODO DEBUG/
+*/
+/*TODO DEBUG*/
 int checkWin(int** arr, int w, int h, int k, int posx, int posy)
 {
     int numel, win, count = 0;
