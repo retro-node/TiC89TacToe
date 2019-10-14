@@ -1,2 +1,2 @@
-2. DEBUG time
 3. VALGRIND
+4. Check k !> longest possible
