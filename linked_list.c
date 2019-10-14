@@ -3,10 +3,11 @@
 * Responisble for holding a dynamic list in memory across nodes
 * Generic and takes function pointers to format or free data according to needs
 
-* Author: Jeffrey Dugmore
-* Student ID: 18816538
+* Author: retro-node
+
 * Date Created: 27/09/2019
 * Last Modified: 03/10/2019
+
 03/10/2019 - Added function to return node data according to position in list,
     added null guard to printLinkedList() LL parameter.
 02/10/2019 - Added function to return length of linked list
@@ -68,7 +69,7 @@ void insertStart(LinkedList* ll, void* data)
         ll->head = newnode;
         ll->count++;
     }
-    
+
 }
 /************
 * Remove head node from LL setting it to the next node in the list
@@ -78,8 +79,8 @@ void* removeStart(LinkedList* ll)
     /* Sets head to head->next, frees old head before setting to null
     * Decrement count
     Conditions:
-        1. empty list 
-        2. single node 
+        1. empty list
+        2. single node
         3. populated
     */
     void* data;
@@ -130,7 +131,7 @@ void insertLast(LinkedList* ll, void* data)
         newnode = createNode(data, ll->tail, NULL);
         ll->tail->next = newnode;
         ll->tail = newnode;
-        
+
     }
     ll->count ++;
 }
@@ -166,7 +167,7 @@ void* removeLast(LinkedList* ll)
         ll->tail = ll->tail->previous;
         free(ll->tail->next);
         ll->tail->next = NULL;
-        ll->count--;   
+        ll->count--;
     }
     return data;
 }
@@ -174,14 +175,14 @@ void* removeLast(LinkedList* ll)
 * Prints the LL head to tail to retain order
 *********/
 void printLinkedList(LinkedList* ll, dataMan printData)
-{   
+{
     void* data;
     ListNode* node;
     if(ll!= NULL)
     {
         node = ll->head;
         while(node != NULL)
-        {   
+        {
             data = node->data;
             printData(data);
             node = node->next;
@@ -207,9 +208,9 @@ void freeLinkedList(LinkedList* ll, dataMan processData)
         curNode = node->next;
         free(node);                  /* FREE */
         node = curNode;
-    }   
+    }
     free(ll); /* free list when clear */
-    /*printf("Attention: List Freed!\n"); Disabled as not applicable with TTT*/ 
+    /*printf("Attention: List Freed!\n"); Disabled as not applicable with TTT*/
 }
 
 /************
@@ -224,7 +225,7 @@ int getListLength(LinkedList* ll)
     {
         i++;
         node = node->next;
-        
+
     }*/
     return ll->count;
 }
@@ -245,5 +246,3 @@ void* accessNode(LinkedList* ll, int nodenum)
     }
     return node->data;
 }
-
-

@@ -3,11 +3,12 @@
 * Responsibile for displaying menu, accessing options, displaying logs and game
     board
 
-* Author: Jeffrey Dugmore
+* Author: retro-node
+
 * Date Created: 29/09/2019
 * Date Modified: 04/10/2019
+
 * TODO add system("clear")
-* Issues: clearInBuff() causes program pause - one too many getchar() calls?
 *****************/
 
 #include "UserInterface.h"
@@ -35,7 +36,7 @@ int main(int argc, char* argv[])
 /****************
 * Uses gameEngine state of board that has been converted for display
 * Prints out the board state to terminal
-* FULFULS FREE OF char** 
+* FULFULS FREE OF char**
 */
 void displayBoard(int width, int height, char** state)
 {
@@ -45,7 +46,7 @@ void displayBoard(int width, int height, char** state)
         printf("||===");
     }
     printf("||\n");
-    for(iii=0; iii < height; iii++) 
+    for(iii=0; iii < height; iii++)
     {
         printf("|");
         for(i=0; i < width; i++)
@@ -55,7 +56,7 @@ void displayBoard(int width, int height, char** state)
         printf("|\n");
         for(ii=0; ii < width; ii++) /* create a row divider after cells */
         {
-            printf("||==="); 
+            printf("||===");
         }
         printf("||\n"); /* end of row divider */
     }
@@ -79,7 +80,7 @@ void viewLogs(Logs* logs)
 * MAIN MENU
 * Holds options and calls all starter methods
 * Displays options and validates input, only launches if gameSettings are valid
-* 
+*
 */
 
 void MainMenu(BoardSettings* gameSettings)
@@ -122,7 +123,7 @@ void MainMenu(BoardSettings* gameSettings)
                         ,*m,*n,*k);
                    break;
                 case 3:
-                    printAllLogs(logs);        
+                    printAllLogs(logs);
                     break;
                 #ifndef SECRET
                 case 4:
@@ -145,7 +146,7 @@ void MainMenu(BoardSettings* gameSettings)
                     }
                     break;
                 #endif
-                #ifdef EDITOR    
+                #ifdef EDITOR
                 case 5: /* Assumes know what doing, no rigorous sanitation */
                     printf("=============EDIT SETTINGS=============\nNew Width"
                     " [M]: ");
@@ -161,7 +162,7 @@ void MainMenu(BoardSettings* gameSettings)
                     "=========\n");
                     done = 1;
                     break;
-                case 0: 
+                case 0:
                     printf("Invalid option.\n");
                     break;
                 default:
@@ -179,7 +180,7 @@ void MainMenu(BoardSettings* gameSettings)
 void printMenu(void)
 {
         printf("\n=========== MAIN MENU ===========\n\t[1]- New Game\n\t"
-            "[2]- View Settings\n\t[3]- View Logs\n\t");               
+            "[2]- View Settings\n\t[3]- View Logs\n\t");
         #ifndef SECRET
             printf("[4]- Save Logs to File\n\t");
         #endif
@@ -194,12 +195,12 @@ void printMenu(void)
 https://www.geeksforgeeks.org/clearing-the-input-buffer-in-cc/
 Accessed at 19:55 04-10-2019
 * Utilised the clear buffer code and placed in method for easier use
-* Causes apparent pause 
+* Causes apparent pause
 */
 void clearInBuff(void)
 {
     printf("\nPress enter to continue...");
-    while(getchar()!='\n'); /* preferred as not undefined by c standard as 
+    while(getchar()!='\n'); /* preferred as not undefined by c standard as
                             fflush(stdin); is */
     printf("\n");
-}   
+}

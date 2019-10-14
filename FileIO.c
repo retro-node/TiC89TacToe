@@ -2,11 +2,9 @@
 * FILE INPUT AND OUTPUT
 * Handles reading settings from and storing logs to a file.
 
-* Author: Jeffrey Dugmore
-* Student ID: 18816538
-
+* Author: retro-node
 * Date Created: 29/09/2019
-* Date Modified: 04/10/2019
+* Date Modified: 15/10/2019
 ************************/
 
 #include "FileIO.h"
@@ -118,7 +116,7 @@ BoardSettings* loadSettings(char* fileN)
 void saveLogs(Logs* log)
 {
     FILE* fileout;
-    char *fname; 
+    char *fname;
     fname = makeFileName(log);
     fileout = fopen(fname, "w");
     free(fname);
@@ -184,7 +182,7 @@ char* makeFileName(Logs* log)
                                   answered Sep 18 '09 at 0:58
                                   By Adam Rosenfield */
     struct tm *localtnow;
-    char* namebuf = (char*)calloc(53, sizeof(char)); 
+    char* namebuf = (char*)calloc(53, sizeof(char));
     /* max int = 10 zeros| *3 ints + 22 constant chars + null t = 53*/
     localtnow = localtime(&rawt);
 

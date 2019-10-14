@@ -3,10 +3,11 @@
 * Manages logfile creation, display and free functions for LinkedList to point
 to. Uses Linked List DS to hold logs within a GameLog struct
 
-* Author: Jeffrey Dugmore
-* Student ID: 18816538
+* Author: retro-node
+
 * Date Created: 01/10/2019
 * Date Modified: 03/10/2019
+
 * ISSUES: typecase wasnt working on 1 line self = (struct*)self, had to
     impliment a copy and free and continued using the copied casted variable.
 * SUSPECTED: copy typecase causing linked list to be uninitialsized.

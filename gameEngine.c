@@ -2,9 +2,10 @@
 * GAME ENGINE
 * Controls game dynamics,
 *
-* Author: Jeffrey Dugmore
+* Author: retro-node
+
 * Date Created: 29/09/2019
-* Date Modified: 04/10/2019
+* Date Modified: 15/10/2019
 
 * Known Issues: reading extra line on input of getCorrds() results in error msg
 being printed, numLinedUpXNeg.
@@ -88,7 +89,7 @@ GameLog* runGame(int m, int n, int k, int gamenum)
                 gameover = 2;
             }
         }
-        
+
     }
     while(!gameover);
 
