@@ -4,12 +4,6 @@
 #include <time.h>
 #include "linked_list.h"
 typedef struct{
-    int min;
-    int hour;
-    int dayn;
-    int month;
-} Time; /* To store time that the game occurred for later processing */
-typedef struct{
     int movenum;
     char player;
     int x;
@@ -23,7 +17,6 @@ typedef struct{
     int m;
     int n;
     int k;
-    Time* Time;
     LinkedList* gameLogs;
 } Logs; /* LOGS STRUCT, settings, game collection, time initialised in menu */
 Logs* createLogs(int,int,int);

@@ -175,6 +175,9 @@ Takes a game log and makes equivilent file name for that log.
 */
 char* makeFileName(Logs* log)
 {
+    int dayn, month, min, hour;
+    time_t rawt = time(NULL);
+    struct tm *localtnow;
     char *namebuf = (char*)calloc(40, sizeof(char));
     int dayn, month, min, hour;
     time_t rawt = time(NULL);   /*time(NULL) From https://stackoverflow.com/
@@ -191,7 +194,7 @@ char* makeFileName(Logs* log)
     hour=localtnow->tm_hour;
 
     sprintf(namebuf, "MNK_%d-%d-%d_%02d-%02d_%02d-%02d.log", log->m, log->n,
-    log->k,log->Time->hour,log->Time->min,log->Time->dayn,log->Time->month);
+    log->k,hour,min,dayn,month);
 
     return namebuf;
 }
