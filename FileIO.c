@@ -170,14 +170,21 @@ void saveLogs(Logs* log)
 Takes a game log and makes equivilent file name for that log.
 * Responsible for creating filename in correct format:
     MNK_<M>-<N>-<K>_<HOUR>-<MIN>_<DAY>-<MONTH>.log
-* Time corresponds to program start time
+* Time corresponds file creation time
 * May reqiure limit on m n and k values
 */
 char* makeFileName(Logs* log)
 {
+    time_t rawt;
+    struct tm *localtnow;
     char *namebuf = (char*)calloc(40, sizeof(char));
+    localtnow = localtime(&rawt);
+    dayn=localtnow->tm_mday;
+    month=localtnow->tm_mon + 1;
+    min=localtnow->tm_min;
+    hour=localtnow->tm_hour;
     sprintf(namebuf, "MNK_%d-%d-%d_%02d-%02d_%02d-%02d.log", log->m, log->n,
-    log->k,log->Time->hour,log->Time->min,log->Time->dayn,log->Time->month);
+    log->k,&hour,&min,&dayn,&month);
 
     return namebuf;
 }

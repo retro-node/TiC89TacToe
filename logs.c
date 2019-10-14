@@ -1,6 +1,6 @@
 /***************************
 * LOGS
-* Manages logfile creation, display and free functions for LinkedList to point 
+* Manages logfile creation, display and free functions for LinkedList to point
 to. Uses Linked List DS to hold logs within a GameLog struct
 
 * Author: Jeffrey Dugmore
@@ -22,20 +22,12 @@ as more than one game can be played per run.
 Logs* createLogs(int m, int n, int k)
 {
     Logs* ThisRun = NULL;
-    time_t raw;
-    struct tm *localtnow;
-    localtnow = localtime(&raw);
+
     /* creates logs struct */
     ThisRun = (Logs*)calloc(1, sizeof(Logs));
     ThisRun->m = m;
     ThisRun->n = n;
     ThisRun->k= k;
-    /* set time to now - game creation date */
-    ThisRun->Time = (Time*)calloc(1,sizeof(Time));
-    ThisRun->Time->dayn=localtnow->tm_mday;
-    ThisRun->Time->month=localtnow->tm_mon + 1;
-    ThisRun->Time->min=localtnow->tm_min;
-    ThisRun->Time->hour=localtnow->tm_hour;
     ThisRun->gameLogs = createLinkedList();
     return ThisRun;
 }
@@ -47,7 +39,7 @@ void addGameLog(Logs* all, GameLog* thisGame)
     insertLast(all->gameLogs, thisGame);
 }
 /***********
-* Allocates space for GameLog 
+* Allocates space for GameLog
 * Returns LL of logsa
 * REQUIRES FREE
 */
@@ -83,6 +75,7 @@ MoveLog* createMoveLog(int turnNo, int player, int x, int y)
     moveLog->y= y;
     return moveLog;
 }
+
 /********
 * Adds to MoveLog to turnLogs Linked list in GameLog using insertLast to keep chronology
 */
@@ -97,7 +90,6 @@ void addMoveLog(GameLog* gamelog, MoveLog* movelog)
 void freeAllLogs(Logs* all)
 {
     freeLinkedList(all->gameLogs, freeMoveLogs);
-    free(all->Time);
     free(all);
 }
 
@@ -113,7 +105,7 @@ void freeGameLogs(void* games)
     free(gamesL);
 }
 /***************
-* For use with freeLinkedList() and printLinkedList() as function to point to, 
+* For use with freeLinkedList() and printLinkedList() as function to point to,
 free logs required on program exit.
 * If not saved will be lost, only free the data
 * REQUIRES LINKED LIST
@@ -179,4 +171,3 @@ void printMoveLogs(void* logs)
         printf("\n\tLocation: %d,%d\n", logsm->x, logsm->y);
     } /* possible memory leak - TODO VERIFY */
 }
-
