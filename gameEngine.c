@@ -6,8 +6,6 @@
 * Date Created: 29/09/2019
 * Date Modified: 04/10/2019
 *TODO:  1. DEBUG checkwin
-        2. input will accept more than 2 coordinates (x,y,z) - fix with get
-        3. Turn No
 * Known Issues: reading extra line on input of getCorrds() results in error msg
 being printed.
 *************************/
@@ -52,7 +50,7 @@ GameLog* runGame(int m, int n, int k, int gamenum)
     {
         if(!gameover)
         {
-            system("clear");
+            /*system("clear");*/
             displayBoard(m, n, graphics(board, m ,n)); /* display the board of
                      its size using graphical representaion with X's and Os' */
             printf("Player 1 - X's Turn:");
@@ -70,7 +68,7 @@ GameLog* runGame(int m, int n, int k, int gamenum)
         }
         if(!gameover)
         {
-            system("clear");
+            /*system("clear");*/
             displayBoard(m, n, graphics(board, m ,n));
             printf("Player 2 - O's Turn:");
             turncount ++;
@@ -84,7 +82,6 @@ GameLog* runGame(int m, int n, int k, int gamenum)
             {
                 gameover = 2;
             }
-            gameover = 2;
         }
     }
     while(!gameover);
@@ -100,7 +97,7 @@ GameLog* runGame(int m, int n, int k, int gamenum)
     { /* O's win */
         printf("\x1b[35m ===============================\n");
         printf("\x1b[35m =======\x1b[33m CONGRATS PLAYER 2 \x1b[35m=====\n");
-        printf("\x1b[35m ===         \x1b[33m YOU            \x1b[35m===\n");;
+        printf("\x1b[35m ===         \x1b[33m YOU            \x1b[35m===\n");
         printf("\x1b[35m ===         \x1b[33m WIN            \x1b[35m===\n");
         printf("\x1b[35m ===============================\n");
 
@@ -127,7 +124,8 @@ GameLog* runGame(int m, int n, int k, int gamenum)
 void getCoords(int* x, int* y, int width, int height)
 {
     char line[MAX_TERM_LINE];
-    int xtemp, ytemp, num;
+    int xtemp, ytemp;
+    char closechar;
     static int tries = 0;
     int done = 0;
     /*fgets(line, MAX_TERM_LINE, stdin);*/
@@ -136,9 +134,9 @@ void getCoords(int* x, int* y, int width, int height)
         /*clearInBuff();*/
         printf("\n\tCoordinates: ");
         fgets(line, MAX_TERM_LINE, stdin);
-        num = sscanf(line, "(%d,%d)", &xtemp, &ytemp);
+        sscanf(line, "(%d,%d%c", &xtemp, &ytemp, &closechar);
         if(xtemp < width && xtemp >= 0 && ytemp < height && ytemp >= 0 &&
-            num == 2)
+            closechar == ')')
         /* within range - no negatives, within the confines of the board and
          only 2 coords provided */
         {
@@ -230,7 +228,7 @@ int checkWin(int** arr, int w, int h, int k, int posx, int posy)
         while(numel != k && count < 8)
         {
             numLinedUp nlu;
-            if(count == 0)
+            if(count == 0) /* select function one at a time until k reached */
             {
                nlu = numLinedUpY;
             }
@@ -289,21 +287,21 @@ int checkWin(int** arr, int w, int h, int k, int posx, int posy)
 */
 static int numLinedUpY(int** arr, int w, int h, int i, int ii)
 {
-    int num = 0;
+    int num = 1;
     if(ii+1 < h)
     {
-        if(arr[i][ii] == arr[i][ii+1]) /* y axis condition */
+        if(arr[i][ii] != 0 && arr[i][ii] == arr[i][ii+1]) /* y axis condition */
         {
             num += numLinedUpY(arr, w, h, i, ii+1);
         }
         else
         {
-            num = 1;
+            num -= 1;
         }
     }
     else
     {
-        num = 1;
+        num -= 1;
     }
     return num;
 
@@ -314,21 +312,21 @@ static int numLinedUpY(int** arr, int w, int h, int i, int ii)
 */
 static int  numLinedUpX(int** arr, int w, int h, int i, int ii)
 {
-    int num = 0;
+    int num = 1;
     if(i+1 < w)
     {
-        if(arr[i][ii] == arr[i+1][ii]) /* try up */
+        if(arr[i][ii] != 0 && arr[i][ii] == arr[i+1][ii]) /* try up */
         {
             num += numLinedUpX(arr, w, h, i+1, ii);
         }
         else
         {
-            num = 1;
+            num -= 1;
         }
     }
     else
     {
-        num = 1;
+        num -= 1;
     }
     return num;
 }
@@ -339,21 +337,21 @@ static int  numLinedUpX(int** arr, int w, int h, int i, int ii)
 
 static int numLinedUpDiagon(int** arr, int w, int h, int i, int ii)
 {
-    int num = 0;
+    int num = 1;
     if(i+1 < w && ii+1 < h)
     {
-        if(arr[i][ii] == arr[i+1][ii+1])
+        if(arr[i][ii] != 0 && arr[i][ii] == arr[i+1][ii+1])
         {
             num += numLinedUpDiagon(arr, w, h, i+1, ii+1);
         }
         else
         {
-            num = 1;
+            num -= 1;
         }
     }
     else
     {
-        num = 1;
+        num -= 1;
     }
     return num;
 }
@@ -363,21 +361,21 @@ static int numLinedUpDiagon(int** arr, int w, int h, int i, int ii)
 */
 static int numLinedUpDiagonFlip(int** arr, int w, int h, int i, int ii)
 {
-    int num = 0;
+    int num = 1;
     if(i-1 >= 0 && ii+1 < h)
     {
-        if(arr[i][ii] == arr[i-1][ii+1]) /* Recurse in negative x and pos y */
+        if(arr[i][ii] != 0 && arr[i][ii] == arr[i-1][ii+1]) /* Recurse in negative x and pos y */
         {
             num += numLinedUpDiagonFlip(arr, w, h, i-1, ii+1);
         }
         else
         {
-            num = 1;
+            num -= 1;
         }
     }
     else
     {
-        num = 1;
+        num -= 1;
     }
     return num;
 }
@@ -395,21 +393,21 @@ tion
 */
 static int numLinedUpYNeg(int** arr, int w, int h, int i, int ii)
 {
-    int num = 0;
+    int num = 1;
     if(ii-1 >= 0)
     {
-        if(arr[i][ii] == arr[i][ii-1])
+        if(arr[i][ii] != 0 && arr[i][ii] == arr[i][ii-1])
         {
             num += numLinedUpYNeg(arr, w, h, i, ii-1);
         }
         else
         {
-            num = 1;
+            num -= 1;
         }
     }
     else
     {
-        num = 1;
+        num -= 1;
     }
     return num;
 
@@ -419,23 +417,23 @@ static int numLinedUpYNeg(int** arr, int w, int h, int i, int ii)
  * NEGATIVE X (LEFT OF SCREEN)
  */
 
-static int  numLinedUpXNeg(int** arr, int w, int h, int i, int ii)
+static int numLinedUpXNeg(int** arr, int w, int h, int i, int ii)
 {
-    int num = 0;
+    int num = 1;
     if(i-1 > 0)
     {
-        if(arr[i][ii] == arr[i-1][ii])
+        if(arr[i][ii] != 0 && arr[i][ii] == arr[i-1][ii])
         {
             num += numLinedUpXNeg(arr, w, h, i-1, ii);
         }
         else
         {
-            num = 1;
+            num -= 1;
         }
     }
     else
     {
-        num = 1;
+        num -= 1;
     }
     return num;
 }
@@ -445,21 +443,21 @@ static int  numLinedUpXNeg(int** arr, int w, int h, int i, int ii)
 */
 static int numLinedUpDiagonNeg(int** arr, int w, int h, int i, int ii)
 {
-    int num = 0;
+    int num = 1;
     if(i-1 >= 0 && ii-1 >= 0)
     {
-        if(arr[i][ii] == arr[i-1][ii-1])
+        if(arr[i][ii] != 0 && arr[i][ii] == arr[i-1][ii-1])
         {
             num += numLinedUpDiagonNeg(arr, w, h, i-1, ii-1);
         }
         else
         {
-            num = 1;
+            num -= 1;
         }
     }
     else
     {
-        num = 1;
+        num -= 1;
     }
     return num;
 }
@@ -470,21 +468,21 @@ static int numLinedUpDiagonNeg(int** arr, int w, int h, int i, int ii)
 
 static int numLinedUpDiagonFlipNeg(int** arr, int w, int h, int i, int ii)
 {
-    int num = 0;
+    int num = 1;
     if(i+1 < w && ii-1 >= 0)
     {
-        if(arr[i][ii] == arr[i+1][ii-1]) /* Recurse in pos x and neg y */
+        if(arr[i][ii] != 0 && arr[i][ii] == arr[i+1][ii-1]) /* Recurse in pos x and neg y */
         {
             num += numLinedUpDiagonFlipNeg(arr, w, h, i+1, ii-1);
         }
         else
         {
-            num = 1;
+            num -= 1;
         }
     }
     else
     {
-        num = 1;
+        num -= 1;
     }
     return num;
 }
