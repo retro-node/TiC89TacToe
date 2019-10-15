@@ -59,8 +59,13 @@ void displayBoard(int width, int height, char** state)
         }
         printf("||\n"); /* end of row divider */
     }
+    for(i=0; i < width; i++) /*free gamestate as it will be generated again*/
+    {
+        free(state[i]);
+    }
     free(state);
 }
+
 /****************
 * Uses gameEngine printLogs as function pointer to print the logs
 * Prints out the linked list of logs to terminal

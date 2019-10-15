@@ -7,7 +7,7 @@
 * Date Modified: 04/10/2019
 
 * Known Issues: reading extra line on input of getCorrds() results in error msg
-being printed.
+being printed, numLinedUpXNeg.
 *************************/
 
 #include "gameEngine.h"
@@ -134,7 +134,7 @@ GameLog* runGame(int m, int n, int k, int gamenum)
 void getCoords(int* x, int* y, int width, int height)
 {
     char line[MAX_TERM_LINE];
-    int xtemp, ytemp;
+    int xtemp = -1, ytemp = -1;
     char closechar;
     static int tries;
     int done = 0;
@@ -231,7 +231,7 @@ lower part of the screen.
 /*TODO DEBUG*/
 int checkWin(int** arr, int w, int h, int k, int posx, int posy)
 {
-    int numel, win, count = 0;
+    int numel = 0, win, count = 0;
     if(posx < w && posy < h && posx >= 0 && posy >= 0) /*within bounds - each
     func has bound checks also */
     {
@@ -254,7 +254,8 @@ int checkWin(int** arr, int w, int h, int k, int posx, int posy)
             else if (count == 5)
             {
                 nlu = numLinedUpXNeg;
-            } else if (count == 3)
+            }
+            else if (count == 3)
             {
                 nlu = numLinedUpDiagon;
             }
@@ -435,7 +436,7 @@ static int numLinedUpYNeg(int** arr, int w, int h, int i, int ii)
 static int  numLinedUpXNeg(int** arr, int w, int h, int i, int ii)
 {
     int num = 1;
-    if(i-1 > 0)
+    if(i-1 >= 0)
     {
         if(arr[i][ii] != 0 && arr[i][ii] == arr[i-1][ii])
         {

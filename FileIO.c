@@ -118,7 +118,10 @@ BoardSettings* loadSettings(char* fileN)
 void saveLogs(Logs* log)
 {
     FILE* fileout;
-    fileout = fopen(makeFileName(log), "w");
+    char *fname; 
+    fname = makeFileName(log);
+    fileout = fopen(fname, "w");
+    free(fname);
     if(fileout == NULL)
     {
         perror("Error opening file");
@@ -181,7 +184,8 @@ char* makeFileName(Logs* log)
                                   answered Sep 18 '09 at 0:58
                                   By Adam Rosenfield */
     struct tm *localtnow;
-    char *namebuf = (char*)calloc(40, sizeof(char));
+    char* namebuf = (char*)calloc(53, sizeof(char)); 
+    /* max int = 10 zeros| *3 ints + 22 constant chars + null t = 53*/
     localtnow = localtime(&rawt);
 
     dayn=localtnow->tm_mday;
@@ -191,6 +195,5 @@ char* makeFileName(Logs* log)
 
     sprintf(namebuf, "MNK_%d-%d-%d_%02d-%02d_%02d-%02d.log", log->m, log->n,
     log->k,hour,min,dayn,month);
-    free(localtnow); /* TODO Determine appropriate free */
     return namebuf;
 }
