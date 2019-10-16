@@ -5,10 +5,10 @@
 * Author: retro-node
 
 * Date Created: 29/09/2019
-* Date Modified: 15/10/2019
+* Date Modified: 16/10/2019
 
 * Known Issues: reading extra line on input of getCorrds() results in error msg
-being printed, numLinedUpXNeg.
+being printed.
 *************************/
 
 #include "gameEngine.h"
@@ -56,7 +56,9 @@ GameLog* runGame(int m, int n, int k, int gamenum)
         }
         if(!gameover)
         {
-            /*system("clear");*/
+            #ifndef NOCLEAR
+            system("clear");
+            #endif
             displayBoard(m, n, graphics(board, m ,n)); /* display the board of
                      its size using graphical representaion with X's and Os' */
             printf("Player 1 - X's Turn:");
@@ -74,7 +76,9 @@ GameLog* runGame(int m, int n, int k, int gamenum)
         }
         if(!gameover)
         {
-            /*system("clear");*/
+            #ifndef NOCLEAR
+            system("clear");
+            #endif
             displayBoard(m, n, graphics(board, m ,n));
             printf("Player 2 - O's Turn:");
             turncount ++;
@@ -96,30 +100,29 @@ GameLog* runGame(int m, int n, int k, int gamenum)
     if(gameover == 1)
     { /* X's win */
         printf("\x1b[32m ===============================\n");
-        printf("\x1b[32m =======\x1b[36m CONGRATS PLAYER 1 \x1b[32m=====\n");
-        printf("\x1b[32m ===     \x1b[36m      YOU           \x1b[32m===\n");
-        printf("\x1b[32m ===      \x1b[36m     WIN           \x1b[32m===\n");
-        printf("\x1b[32m ===============================\n");
+        printf(" =======\x1b[36m CONGRATS PLAYER 1 \x1b[32m=====\n");
+        printf(" ===     \x1b[36m      YOU           \x1b[32m===\n");
+        printf(" ===      \x1b[36m     WIN           \x1b[32m===\n");
+        printf(" ===============================\n");
     }
     else if(gameover == 2)
     { /* O's win */
         printf("\x1b[35m ===============================\n");
-        printf("\x1b[35m =======\x1b[33m CONGRATS PLAYER 2 \x1b[35m=====\n");
-        printf("\x1b[35m ===         \x1b[33m  YOU           \x1b[35m===\n");
-        printf("\x1b[35m ===         \x1b[33m  WIN           \x1b[35m===\n");
-        printf("\x1b[35m ===============================\n");
+        printf(" =======\x1b[33m CONGRATS PLAYER 2 \x1b[35m=====\n");
+        printf(" ===         \x1b[33m  YOU           \x1b[35m===\n");
+        printf(" ===         \x1b[33m  WIN           \x1b[35m===\n");
+        printf(" ===============================\n");
 
     }
     else
     { /* DRAW */
         printf("\x1b[31m ===============================\n");
-        printf("\x1b[31m =====\x1b[34m EVERYONE IS A WINNER \x1b[31m====\n");
-        printf("\x1b[31m ===   \x1b[34m    ..OR A LOSER      \x1b[31m===\n");
-        printf("\x1b[31m ==\x1b[34m really makes you think... \x1b[31m==\n");
-        printf("\x1b[31m ===============================\n");
+        printf(" =====\x1b[34m EVERYONE IS A WINNER \x1b[31m====\n");
+        printf(" ===   \x1b[34m    ..OR A LOSER      \x1b[31m===\n");
+        printf(" ==\x1b[34m really makes you think... \x1b[31m==\n");
+        printf(" ===============================\n");
     }
-    printf("\x1b[0m");
-    /*freeGame(board, m);*/
+    printf("\x1b[0m"); /* reset colour */
     for(freei=0; freei < m; freei++) /* non contiguous must be freed first */
     {
         free(board[freei]);
@@ -566,17 +569,4 @@ int** initialiseGame(int m, int n)
         gameState[i] = (int*)calloc(n, sizeof(int));
     }
     return gameState;
-}
-/****************
-* Frees the gmae initialised by initialiseGame
-* Must take this form as non contiguous i.e. can't block free with one free()
-*/
-void freeGame(int** game, int len)
-{
-    int i;
-    for(i=0; i < len; i++) /* non contiguous must be freed first */
-    {
-        free(game[i]);
-    }
-    free(game);
 }

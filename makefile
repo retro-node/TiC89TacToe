@@ -14,6 +14,11 @@ CFLAGS += -D EDITOR
 EDITOR : clean $(EXEC)
 endif
 
+ifdef NOCLEAR
+CFLAGS += -D NOCLEAR
+SECRET : clean $(EXEC)
+endif
+
 $(EXEC) : $(OBJ)
 	$(CC) $(OBJ) -o $(EXEC)
 

@@ -6,9 +6,7 @@
 * Author: retro-node
 
 * Date Created: 29/09/2019
-* Date Modified: 04/10/2019
-
-* TODO add system("clear")
+* Date Modified: 16/10/2019
 *****************/
 
 #include "UserInterface.h"
@@ -121,9 +119,12 @@ void MainMenu(BoardSettings* gameSettings)
                     printf("=========== SETTINGS ============\n"
                         "Width [M]: %d\nHeight [N]: %d\nTiles to Win [K]: %d\n"
                         ,*m,*n,*k);
+                    printMenu();
                    break;
                 case 3:
                     printAllLogs(logs);
+                    clearInBuff();
+                    printMenu();
                     break;
                 #ifndef SECRET
                 case 4:
@@ -148,6 +149,9 @@ void MainMenu(BoardSettings* gameSettings)
                 #endif
                 #ifdef EDITOR
                 case 5: /* Assumes know what doing, no rigorous sanitation */
+                    #ifndef NOCLEAR
+                    system("clear");
+                    #endif
                     printf("=============EDIT SETTINGS=============\nNew Width"
                     " [M]: ");
                     scanf("%d", m);
@@ -155,10 +159,11 @@ void MainMenu(BoardSettings* gameSettings)
                     scanf("%d", n);
                     printf("New Tiles to Win [K]: ");
                     scanf("%d", k);
+                    printMenu();
                     break;
                 #endif
                 case 9:
-                    printf("Thanks for playing!\n=============Goodbye===="
+                    printf("Thanks for playing!\n============= Goodbye ===="
                     "=========\n");
                     done = 1;
                     break;
@@ -179,6 +184,9 @@ void MainMenu(BoardSettings* gameSettings)
 }
 void printMenu(void)
 {
+        #ifndef NOCLEAR
+        system("clear");
+        #endif
         printf("\n=========== MAIN MENU ===========\n\t[1]- New Game\n\t"
             "[2]- View Settings\n\t[3]- View Logs\n\t");
         #ifndef SECRET
@@ -195,7 +203,6 @@ void printMenu(void)
 https://www.geeksforgeeks.org/clearing-the-input-buffer-in-cc/
 Accessed at 19:55 04-10-2019
 * Utilised the clear buffer code and placed in method for easier use
-* Causes apparent pause
 */
 void clearInBuff(void)
 {

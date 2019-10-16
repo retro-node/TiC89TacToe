@@ -4,8 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <time.h> 
+#include <time.h>
 #include "logs.h"
+/* struct to hold board settings allowing returning of all values required */
 typedef struct BoardSettings{
     int m; /* width */
     int n; /* height */
