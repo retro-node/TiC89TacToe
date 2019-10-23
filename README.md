@@ -9,18 +9,18 @@ EDITOR=1 - For editing the settings on the fly, adds menu options.
 SECRET=1 - For incognito TicTacToe for all your secretive needs.
 NOCLEAR=1 - For single output (no linux "clear" command) useful for debugging.
 
-### Files
+# Files
 ## 11 Files
 settings.txt - sample settings
 
-# Headers
+### Headers
 UserInterface.h
 FileIO.h
 gameEngine.h
 logs.h
 linked_list.h
 
-# C Files
+### C Files
 FileIO.c
 gameEngine.c
 UserInterface.c
